@@ -2,11 +2,46 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>music_list</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Music List</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        table {
+            width: 100%;
+            margin-top: 20px;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #35424a;
+            color: white;
+        }
+        img {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+        }
+        tbody tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        tbody tr:hover {
+            background-color: #f1f1f1;
+        }
+    </style>
 </head>
 <body>
     <h1>Music List</h1>
-    <table border="1">
+    <table>
         <thead>
             <tr>
                 <th>Title</th>  <th>Picture</th> <th>Artist</th>  <th>Style</th> <th>More</th>
@@ -15,27 +50,21 @@
         <tbody>
             <tr>
                 <td>The Dark Side of the Moon</td>
-                <td>
-                    <img style="width:100px;height:100px;" src="/static/music.jpg" alt="None">
-                </td>
+                <td><img src="/static/music.jpg" alt="None"></td>
                 <td>Pink Floyd</td>
                 <td>Progressive rock</td>
                 <td>Edit Deleted</td>
             </tr>
             <tr>
                 <td>Stairway to Heaven</td>
-                <td>
-                    <img style="width:100px;height:100px;" src="/static/music2.jpg" alt="None">
-                </td>
+                <td><img src="/static/music2.jpg" alt="None"></td>
                 <td>Led Zeppelin</td>
                 <td>Progressive rock</td>
                 <td>Edit Deleted</td>
             </tr>
             <tr>
                 <td>Hotel California</td>
-                <td>
-                    <img style="width:100px;height:100px;" src="/static/music3.jpg" alt="None">
-                </td>
+                <td><img src="/static/music3.jpg" alt="None"></td>
                 <td>The Eagles</td>
                 <td>Progressive rock</td>
                 <td>Edit Deleted</td>

@@ -2,26 +2,154 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Levi Project</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Levi's Personal Blog</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        header {
+            background: #35424a;
+            color: #ffffff;
+            padding: 15px 0;
+            text-align: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        header h1 {
+            margin: 0;
+        }
+        nav a {
+            color: navajowhite;
+            text-decoration: none;
+            margin: 0 15px;
+            padding: 10px 15px;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+        nav a:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+        .container {
+            width: 80%;
+            margin: auto;
+            overflow: hidden;
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .carousel img {
+            width: 100%;
+            display: none;
+        }
+        .post {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #dddddd;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+        .comments {
+            margin-top: 30px;
+            border-top: 1px solid #dddddd;
+            padding-top: 20px;
+        }
+        footer {
+            text-align: center;
+            padding: 10px 0;
+            background: #35424a;
+            color: #ffffff;
+        }
+        footer p {
+            margin: 0;
+        }
+    </style>
 </head>
 <body>
-    <h1>Welcome to Levi's Project</h1>
-    <p>This is a simple HTML page. <a href="/about">-->About Me<--</a></p>
-    <div>Music is my life and I love playing music.</div>
-    <p>I love coding. <a href="http://plugx.club/sounds">-->This is my Website<--</a></p>
-    <p>I graduated from the Guangzhou Institute of Science and Technology, Guangdong. My major is Software Engineering.</p>
-    <p>Here is my music list: <a href="/music">-->Go to Music List<--</a></p>
-    <div><label>
-        <h2>
-            Your voice is important to me.
-        </h2>
-        <input type="text" placeholder="Write your advice here...">
-        <select>
-            <option value="1">Good</option>
-            <option value="2">Bad</option>
-            <option value="3">Neutral</option>
-        </select>
-        <input type="submit" value="Submit">
-    </label></div>
+    <header>
+        <h1>Welcome to Levi's Blog</h1>
+        <nav>
+            <a href="/register">注册</a>
+            <a href="/login">登录</a>
+            <a href="/about">关于我</a>
+            <a href="/music">音乐列表</a>
+        </nav>
+    </header>
+    <div class="container">
+        <div class="img">
+            <h1>最新作品</h1>
+        </div>
+
+        <div class="post">
+            <h2>我的音乐旅程</h2>
+            <p>音乐是我的生命，我热爱演奏音乐。这里是我最近在创作的音乐作品。</p>
+        </div>
+
+        <div class="post">
+            <h2>编程的乐趣</h2>
+            <p>我喜欢编码，通过编程解决问题是一种令人兴奋的体验。这里是我最近的项目和想法。</p>
+        </div>
+
+        <div class="post">
+            <h2>我的博客</h2>
+            <p>欢迎来到我的博客！在这里我分享我的日常生活、音乐和编程的热情。</p>
+        </div>
+
+        <div class="comments">
+            <h2>您的声音对我很重要</h2>
+            <label>
+                <input type="text" placeholder="写下您的建议...">
+                <select>
+                    <option value="1">好的</option>
+                    <option value="2">坏的</option>
+                    <option value="3">中立的</option>
+                </select>
+                <input type="submit" value="提交">
+            </label>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2023 Levi's Blog. 保留所有权利。</p>
+    </footer>
+
+    <script>
+        let currentIndex = 0;
+        const slides = document.querySelectorAll('.carousel img');
+        const indicators = document.querySelectorAll('.indicator');
+        const totalSlides = slides.length;
+
+        function showSlide(index) {
+            slides.forEach((slide, i) => {
+                slide.classList.remove('active');
+                indicators[i].classList.remove('active');
+                if (i === index) {
+                    slide.classList.add('active');
+                    indicators[i].classList.add('active');
+                }
+            });
+        }
+
+        function nextSlide() {
+            currentIndex = (currentIndex + 1) % totalSlides;
+            showSlide(currentIndex);
+        }
+
+        function prevSlide() {
+            currentIndex = (currentIndex - 1 + totalSlides) % totalSlides;
+            showSlide(currentIndex);
+        }
+
+        setInterval(nextSlide, 5000);
+    </script>
 </body>
 </html>

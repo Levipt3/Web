@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .register-container {
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 400px;
+        }
+        h1.c1 {
+            text-align: center;
+            color: navajowhite;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+        div {
+            margin-bottom: 15px;
+        }
+        input[type="text"], input[type="password"], select {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        input[type="radio"], input[type="checkbox"] {
+            margin-right: 5px;
+        }
+        input[type="submit"], input[type="reset"] {
+            background-color: #35424a;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+        input[type="submit"]:hover, input[type="reset"]:hover {
+            background-color: #4a5568;
+        }
+    </style>
+</head>
+<body>
+    <div class="register-container">
+        <h1 class="c1">Register</h1>
+        <form action="/post/register" method="post">
+            <div>
+                Username: <input type="text" name="username">
+            </div>
+            <div>
+                Password: <input type="password" name="password">
+            </div>
+            <div>
+                Sex: <input type="radio" name="sex"> Male <input type="radio" name="sex"> Female
+            </div>
+            <div>
+                Hobby: <input type="checkbox" name="hobby"> Reading <input type="checkbox" name="hobby"> Writing <input type="checkbox" name="hobby"> Traveling
+            </div>
+            <div>
+                City:
+                <select name="city">
+                    <option value="Beijing">Beijing</option>
+                    <option value="Shanghai">Shanghai</option>
+                    <option value="Guangzhou">Guangzhou</option>
+                    <option value="Shenzhen">Shenzhen</option>
+                </select>
+            </div>
+            <div>
+                <input type="submit" value="Submit">
+                <input type="reset" value="Reset">
+            </div>
+        </form>
+    </div>
+</body>
+</html>
