@@ -3,89 +3,299 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register</title>
+    <title>注册</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
+        :root {
+            --primary-color: #35424a;
+            --hover-color: #4a5568;
+            --bg-color: #f4f4f4;
+            --card-bg: #ffffff;
+        }
+
         body {
             font-family: 'Arial', sans-serif;
             line-height: 1.6;
             margin: 0;
             padding: 0;
-            background-color: #f4f4f4;
+            background: linear-gradient(135deg, #f4f4f4 0%, #e0e0e0 100%);
+            min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
         }
+
         .register-container {
-            background: #ffffff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            width: 400px;
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            width: 450px;
+            animation: slideUp 0.5s ease forwards;
+            margin: 20px;
         }
-        h1.c1 {
+
+        @keyframes slideUp {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        h1 {
             text-align: center;
-            color: navajowhite;
+            color: var(--primary-color);
+            margin-bottom: 30px;
+            font-size: 2em;
         }
-        form {
+
+        .form-group {
+            margin-bottom: 20px;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #666;
+            font-size: 14px;
+        }
+
+        .form-group input[type="text"],
+        .form-group input[type="password"],
+        .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s;
+            box-sizing: border-box;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            border-color: var(--primary-color);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(53, 66, 74, 0.1);
+        }
+
+        .radio-group, .checkbox-group {
             display: flex;
-            flex-direction: column;
+            gap: 20px;
+            margin-top: 10px;
         }
-        div {
-            margin-bottom: 15px;
-        }
-        input[type="text"], input[type="password"], select {
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-        }
-        input[type="radio"], input[type="checkbox"] {
-            margin-right: 5px;
-        }
-        input[type="submit"], input[type="reset"] {
-            background-color: #35424a;
-            color: white;
-            padding: 10px;
-            border: none;
-            border-radius: 4px;
+
+        .radio-group label, .checkbox-group label {
+            display: flex;
+            align-items: center;
             cursor: pointer;
-            margin-right: 10px;
         }
-        input[type="submit"]:hover, input[type="reset"]:hover {
-            background-color: #4a5568;
+
+        .radio-group input[type="radio"],
+        .checkbox-group input[type="checkbox"] {
+            margin-right: 8px;
+            cursor: pointer;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 30px;
+        }
+
+        .button-group button {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+
+        .submit-btn {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .reset-btn {
+            background-color: #e0e0e0;
+            color: #666;
+        }
+
+        .submit-btn:hover {
+            background-color: var(--hover-color);
+            transform: translateY(-2px);
+        }
+
+        .reset-btn:hover {
+            background-color: #d0d0d0;
+            transform: translateY(-2px);
+        }
+
+        .progress-bar {
+            height: 4px;
+            background-color: #eee;
+            border-radius: 2px;
+            margin-top: 20px;
+            overflow: hidden;
+        }
+
+        .progress {
+            width: 0;
+            height: 100%;
+            background-color: var(--primary-color);
+            transition: width 0.3s ease;
+        }
+
+        .error-message {
+            color: #e74c3c;
+            font-size: 14px;
+            margin-top: 5px;
+            display: none;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
         }
     </style>
 </head>
 <body>
     <div class="register-container">
-        <h1 class="c1">Register</h1>
-        <form action="/post/register" method="post">
-            <div>
-                Username: <input type="text" name="username">
+        <h1>创建账号</h1>
+        <form id="registerForm" action="/register" method="post">
+            <div class="form-group">
+                <label>用户名</label>
+                <input type="text" name="username" required>
+                <div class="error-message"></div>
             </div>
-            <div>
-                Password: <input type="password" name="password">
+
+            <div class="form-group">
+                <label>密码</label>
+                <input type="password" name="password" required>
+                <div class="error-message"></div>
+                <div class="progress-bar">
+                    <div class="progress"></div>
+                </div>
             </div>
-            <div>
-                Sex: <input type="radio" name="sex"> Male <input type="radio" name="sex"> Female
+
+            <div class="form-group">
+                <label>性别</label>
+                <div class="radio-group">
+                    <label>
+                        <input type="radio" name="sex" value="male" required> 男
+                    </label>
+                    <label>
+                        <input type="radio" name="sex" value="female"> 女
+                    </label>
+                </div>
             </div>
-            <div>
-                Hobby: <input type="checkbox" name="hobby"> Reading <input type="checkbox" name="hobby"> Writing <input type="checkbox" name="hobby"> Traveling
+
+            <div class="form-group">
+                <label>兴趣爱好</label>
+                <div class="checkbox-group">
+                    <label>
+                        <input type="checkbox" name="hobby" value="reading"> 阅读
+                    </label>
+                    <label>
+                        <input type="checkbox" name="hobby" value="writing"> 写作
+                    </label>
+                    <label>
+                        <input type="checkbox" name="hobby" value="traveling"> 旅行
+                    </label>
+                </div>
             </div>
-            <div>
-                City:
-                <select name="city">
-                    <option value="Beijing">Beijing</option>
-                    <option value="Shanghai">Shanghai</option>
-                    <option value="Guangzhou">Guangzhou</option>
-                    <option value="Shenzhen">Shenzhen</option>
+
+            <div class="form-group">
+                <label>城市</label>
+                <select name="city" required>
+                    <option value="">请选择城市</option>
+                    <option value="Beijing">北京</option>
+                    <option value="Shanghai">上海</option>
+                    <option value="Guangzhou">广州</option>
+                    <option value="Shenzhen">深圳</option>
                 </select>
             </div>
-            <div>
-                <input type="submit" value="Submit">
-                <input type="reset" value="Reset">
+
+            <div class="button-group">
+                <button type="submit" class="submit-btn">注册</button>
+                <button type="reset" class="reset-btn">重置</button>
             </div>
         </form>
     </div>
+
+    <script>
+        // 密码强度检查
+        const passwordInput = document.querySelector('input[name="password"]');
+        const progress = document.querySelector('.progress');
+
+        passwordInput.addEventListener('input', function() {
+            const strength = checkPasswordStrength(this.value);
+            progress.style.width = strength + '%';
+            progress.style.backgroundColor = 
+                strength < 33 ? '#e74c3c' : 
+                strength < 66 ? '#f1c40f' : 
+                '#2ecc71';
+        });
+
+        function checkPasswordStrength(password) {
+            let strength = 0;
+            if(password.length >= 8) strength += 25;
+            if(password.match(/[A-Z]/)) strength += 25;
+            if(password.match(/[0-9]/)) strength += 25;
+            if(password.match(/[^A-Za-z0-9]/)) strength += 25;
+            return strength;
+        }
+
+        // 表单验证
+        const form = document.getElementById('registerForm');
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            let isValid = true;
+            
+            // 用户名验证
+            const username = this.username.value;
+            if(username.length < 3) {
+                showError(this.username, '用户名至少需要3个字符');
+                isValid = false;
+            }
+
+            // 密码验证
+            const password = this.password.value;
+            if(checkPasswordStrength(password) < 75) {
+                showError(this.password, '密码强度不够，需要包含大写字母、数字和特殊字符');
+                isValid = false;
+            }
+
+            // 如果验证通过，提交表单
+            if(isValid) {
+                this.submit();
+            }
+        });
+
+        function showError(input, message) {
+            const errorDiv = input.nextElementSibling;
+            errorDiv.textContent = message;
+            errorDiv.style.display = 'block';
+            input.style.borderColor = '#e74c3c';
+            errorDiv.style.animation = 'shake 0.5s ease-in-out';
+        }
+
+        // 输入框焦点效果
+        const formGroups = document.querySelectorAll('.form-group');
+        formGroups.forEach(group => {
+            const input = group.querySelector('input, select');
+            if(input) {
+                input.addEventListener('focus', () => {
+                    group.style.transform = 'scale(1.02)';
+                });
+                input.addEventListener('blur', () => {
+                    group.style.transform = 'scale(1)';
+                });
+            }
+        });
+    </script>
 </body>
 </html>

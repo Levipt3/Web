@@ -7,15 +7,32 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
+        :root {
+            --bg-color: #f4f4f4;
+            --text-color: #333;
+            --header-bg: #35424a;
+            --card-bg: #ffffff;
+        }
+
+        .dark-mode {
+            --bg-color: #1a1a1a;
+            --text-color: #ffffff;
+            --header-bg: #2c3e50;
+            --card-bg: #2d2d2d;
+        }
+
         body {
             font-family: 'Roboto', sans-serif;
             line-height: 1.6;
             margin: 0;
             padding: 0;
-            background-color: #f4f4f4;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            transition: background-color 0.3s, color 0.3s;
         }
+
         header {
-            background: #35424a;
+            background: var(--header-bg);
             color: #ffffff;
             padding: 15px 0;
             text-align: center;
@@ -24,57 +41,166 @@
             z-index: 1000;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
+
         header h1 {
             margin: 0;
         }
+
         nav a {
             color: navajowhite;
             text-decoration: none;
             margin: 0 15px;
             padding: 10px 15px;
             border-radius: 4px;
-            transition: background-color 0.3s;
+            transition: all 0.3s;
+            position: relative;
         }
-        nav a:hover {
-            background-color: rgba(255, 255, 255, 0.2);
+
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background: navajowhite;
+            transition: all 0.3s;
+            transform: translateX(-50%);
         }
+
+        nav a:hover::after {
+            width: 100%;
+        }
+
         .container {
             width: 80%;
             margin: auto;
             overflow: hidden;
-            background: #ffffff;
+            background: var(--card-bg);
             padding: 20px;
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
         }
+
         .carousel img {
             width: 100%;
             display: none;
         }
+
         .post {
             margin: 20px 0;
-            padding: 15px;
+            padding: 20px;
             border: 1px solid #dddddd;
-            border-radius: 5px;
-            background-color: #f9f9f9;
+            border-radius: 8px;
+            background-color: var(--card-bg);
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
         }
+
+        .post:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
         .comments {
             margin-top: 30px;
             border-top: 1px solid #dddddd;
             padding-top: 20px;
         }
+
+        .comment-form {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .comment-form textarea {
+            padding: 10px;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .comment-form select {
+            padding: 8px;
+            border-radius: 4px;
+        }
+
+        .comment-form button {
+            padding: 10px 20px;
+            background-color: #35424a;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .comment-form button:hover {
+            background-color: #2c3e50;
+        }
+
+        .comment-list {
+            margin-top: 20px;
+        }
+
+        .comment-item {
+            padding: 15px;
+            border-bottom: 1px solid #ddd;
+            margin-bottom: 10px;
+        }
+
+        .theme-toggle {
+            position: fixed;
+            right: 20px;
+            top: 20px;
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 1.5rem;
+            cursor: pointer;
+            z-index: 1001;
+        }
+
+        #back-to-top {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #35424a;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            opacity: 0;
+            transition: opacity 0.3s;
+            z-index: 1000;
+        }
+
+        #back-to-top.visible {
+            opacity: 1;
+        }
+
         footer {
             text-align: center;
-            padding: 10px 0;
-            background: #35424a;
+            padding: 20px 0;
+            background: var(--header-bg);
             color: #ffffff;
-        }
-        footer p {
-            margin: 0;
+            margin-top: 40px;
         }
     </style>
 </head>
 <body>
+    <button class="theme-toggle" onclick="toggleTheme()">
+        <i class="fas fa-moon"></i>
+    </button>
+
     <header>
         <h1>Welcome to Levi's Blog</h1>
         <nav>
@@ -106,21 +232,28 @@
 
         <div class="comments">
             <h2>您的声音对我很重要</h2>
-            <label>
-                <input type="text" placeholder="写下您的建议...">
-                <select>
-                    <option value="1">好的</option>
-                    <option value="2">坏的</option>
-                    <option value="3">中立的</option>
+            <form class="comment-form">
+                <textarea placeholder="写下您的想法..." required></textarea>
+                <select required>
+                    <option value="1">心情愉悦 😊</option>
+                    <option value="2">心情低落 😔</option>
+                    <option value="3">一般般啦 😐</option>
                 </select>
-                <input type="submit" value="提交">
-            </label>
+                <button type="submit">发表评论</button>
+            </form>
+            <div class="comment-list">
+                <!-- 评论将在这里动态显示 -->
+            </div>
         </div>
     </div>
 
     <footer>
         <p>&copy; 2023 Levi's Blog. 保留所有权利。</p>
     </footer>
+
+    <div id="back-to-top" onclick="scrollToTop()">
+        <i class="fas fa-arrow-up"></i>
+    </div>
 
     <script>
         let currentIndex = 0;
@@ -150,6 +283,60 @@
         }
 
         setInterval(nextSlide, 5000);
+
+        // 主题切换
+        function toggleTheme() {
+            document.body.classList.toggle('dark-mode');
+            const icon = document.querySelector('.theme-toggle i');
+            icon.classList.toggle('fa-moon');
+            icon.classList.toggle('fa-sun');
+        }
+
+        // 返回顶部
+        const backToTop = document.getElementById('back-to-top');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 300) {
+                backToTop.classList.add('visible');
+            } else {
+                backToTop.classList.remove('visible');
+            }
+        });
+
+        function scrollToTop() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+
+        // 评论功能
+        document.querySelector('.comment-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const commentText = this.querySelector('textarea').value;
+            const mood = this.querySelector('select').value;
+            
+            if (commentText.trim()) {
+                const commentList = document.querySelector('.comment-list');
+                const commentItem = document.createElement('div');
+                commentItem.className = 'comment-item';
+                commentItem.innerHTML = `
+                    <p>${commentText}</p>
+                    <small>心情: ${mood === '1' ? '😊' : mood === '2' ? '😔' : '😐'}</small>
+                `;
+                commentList.prepend(commentItem);
+                this.reset();
+            }
+        });
+
+        // 文章卡片动画
+        document.querySelectorAll('.post').forEach(post => {
+            post.addEventListener('click', () => {
+                post.style.transform = 'scale(1.02)';
+                setTimeout(() => {
+                    post.style.transform = 'translateY(-5px)';
+                }, 200);
+            });
+        });
     </script>
 </body>
 </html>

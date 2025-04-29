@@ -3,73 +3,337 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Music List</title>
+    <title>音乐列表</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
+        :root {
+            --primary-color: #35424a;
+            --hover-color: #4a5568;
+            --bg-color: #f4f4f4;
+            --card-bg: #ffffff;
+        }
+
         body {
             font-family: 'Arial', sans-serif;
             line-height: 1.6;
             margin: 0;
-            padding: 0;
-            background-color: #f4f4f4;
+            padding: 20px;
+            background: linear-gradient(135deg, #f4f4f4 0%, #e0e0e0 100%);
+            min-height: 100vh;
         }
-        table {
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: var(--card-bg);
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: var(--primary-color);
+            margin-bottom: 30px;
+            font-size: 2.5em;
+        }
+
+        .music-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+            padding: 20px;
+        }
+
+        .music-card {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+        }
+
+        .music-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .music-image {
+            position: relative;
             width: 100%;
-            margin-top: 20px;
-            border-collapse: collapse;
+            height: 200px;
+            overflow: hidden;
         }
-        th, td {
-            border: 1px solid #ddd;
-            padding: 8px;
-            text-align: left;
-        }
-        th {
-            background-color: #35424a;
-            color: white;
-        }
-        img {
-            width: 100px;
-            height: 100px;
+
+        .music-image img {
+            width: 100%;
+            height: 100%;
             object-fit: cover;
+            transition: transform 0.3s ease;
         }
-        tbody tr:nth-child(even) {
-            background-color: #f9f9f9;
+
+        .music-card:hover .music-image img {
+            transform: scale(1.1);
         }
-        tbody tr:hover {
-            background-color: #f1f1f1;
+
+        .play-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .music-card:hover .play-overlay {
+            opacity: 1;
+        }
+
+        .play-btn {
+            color: white;
+            font-size: 3em;
+            transform: scale(0.8);
+            transition: transform 0.3s ease;
+        }
+
+        .music-card:hover .play-btn {
+            transform: scale(1);
+        }
+
+        .music-info {
+            padding: 15px;
+        }
+
+        .music-title {
+            font-size: 1.2em;
+            font-weight: bold;
+            margin: 0;
+            color: var(--primary-color);
+        }
+
+        .music-artist {
+            color: #666;
+            margin: 5px 0;
+        }
+
+        .music-style {
+            display: inline-block;
+            padding: 3px 8px;
+            background: #f0f0f0;
+            border-radius: 15px;
+            font-size: 0.9em;
+            color: #666;
+        }
+
+        .actions {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 15px;
+            border-top: 1px solid #eee;
+        }
+
+        .action-btn {
+            background: none;
+            border: none;
+            color: #666;
+            cursor: pointer;
+            transition: color 0.3s ease;
+            font-size: 1.1em;
+        }
+
+        .action-btn:hover {
+            color: var(--primary-color);
+        }
+
+        .search-bar {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            padding: 0 20px;
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+
+        .search-input:focus {
+            border-color: var(--primary-color);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(53, 66, 74, 0.1);
+        }
+
+        .filter-btn {
+            padding: 12px 20px;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .filter-btn:hover {
+            background: var(--hover-color);
+            transform: translateY(-2px);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .music-card {
+            animation: fadeIn 0.5s ease forwards;
         }
     </style>
 </head>
 <body>
-    <h1>Music List</h1>
-    <table>
-        <thead>
-            <tr>
-                <th>Title</th>  <th>Picture</th> <th>Artist</th>  <th>Style</th> <th>More</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>The Dark Side of the Moon</td>
-                <td><img src="/static/music.jpg" alt="None"></td>
-                <td>Pink Floyd</td>
-                <td>Progressive rock</td>
-                <td>Edit Deleted</td>
-            </tr>
-            <tr>
-                <td>Stairway to Heaven</td>
-                <td><img src="/static/music2.jpg" alt="None"></td>
-                <td>Led Zeppelin</td>
-                <td>Progressive rock</td>
-                <td>Edit Deleted</td>
-            </tr>
-            <tr>
-                <td>Hotel California</td>
-                <td><img src="/static/music3.jpg" alt="None"></td>
-                <td>The Eagles</td>
-                <td>Progressive rock</td>
-                <td>Edit Deleted</td>
-            </tr>
-        </tbody>
-    </table>
+    <div class="container">
+        <h1>音乐列表</h1>
+        
+        <div class="search-bar">
+            <input type="text" class="search-input" placeholder="搜索音乐...">
+            <button class="filter-btn">
+                <i class="fas fa-filter"></i> 筛选
+            </button>
+        </div>
+
+        <div class="music-grid">
+            <div class="music-card">
+                <div class="music-image">
+                    <img src="/static/music.jpg" alt="The Dark Side of the Moon">
+                    <div class="play-overlay">
+                        <i class="fas fa-play-circle play-btn"></i>
+                    </div>
+                </div>
+                <div class="music-info">
+                    <h3 class="music-title">The Dark Side of the Moon</h3>
+                    <p class="music-artist">Pink Floyd</p>
+                    <span class="music-style">Progressive rock</span>
+                </div>
+                <div class="actions">
+                    <button class="action-btn" title="添加到播放列表">
+                        <i class="fas fa-plus"></i>
+                    </button>
+                    <button class="action-btn" title="收藏">
+                        <i class="far fa-heart"></i>
+                    </button>
+                    <button class="action-btn" title="更多选项">
+                        <i class="fas fa-ellipsis-h"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="music-card">
+                <div class="music-image">
+                    <img src="/static/music2.jpg" alt="Stairway to Heaven">
+                    <div class="play-overlay">
+                        <i class="fas fa-play-circle play-btn"></i>
+                    </div>
+                </div>
+                <div class="music-info">
+                    <h3 class="music-title">Stairway to Heaven</h3>
+                    <p class="music-artist">Led Zeppelin</p>
+                    <span class="music-style">Progressive rock</span>
+                </div>
+                <div class="actions">
+                    <button class="action-btn" title="添加到播放列表">
+                        <i class="fas fa-plus"></i>
+                    </button>
+                    <button class="action-btn" title="收藏">
+                        <i class="far fa-heart"></i>
+                    </button>
+                    <button class="action-btn" title="更多选项">
+                        <i class="fas fa-ellipsis-h"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="music-card">
+                <div class="music-image">
+                    <img src="/static/music3.jpg" alt="Hotel California">
+                    <div class="play-overlay">
+                        <i class="fas fa-play-circle play-btn"></i>
+                    </div>
+                </div>
+                <div class="music-info">
+                    <h3 class="music-title">Hotel California</h3>
+                    <p class="music-artist">The Eagles</p>
+                    <span class="music-style">Progressive rock</span>
+                </div>
+                <div class="actions">
+                    <button class="action-btn" title="添加到播放列表">
+                        <i class="fas fa-plus"></i>
+                    </button>
+                    <button class="action-btn" title="收藏">
+                        <i class="far fa-heart"></i>
+                    </button>
+                    <button class="action-btn" title="更多选项">
+                        <i class="fas fa-ellipsis-h"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 搜索功能
+        const searchInput = document.querySelector('.search-input');
+        const musicCards = document.querySelectorAll('.music-card');
+
+        searchInput.addEventListener('input', function() {
+            const searchTerm = this.value.toLowerCase();
+            
+            musicCards.forEach(card => {
+                const title = card.querySelector('.music-title').textContent.toLowerCase();
+                const artist = card.querySelector('.music-artist').textContent.toLowerCase();
+                
+                if (title.includes(searchTerm) || artist.includes(searchTerm)) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        });
+
+        // 收藏功能
+        document.querySelectorAll('.action-btn').forEach(btn => {
+            if (btn.title === '收藏') {
+                btn.addEventListener('click', function() {
+                    const icon = this.querySelector('i');
+                    if (icon.classList.contains('far')) {
+                        icon.classList.replace('far', 'fas');
+                        icon.style.color = '#e74c3c';
+                    } else {
+                        icon.classList.replace('fas', 'far');
+                        icon.style.color = '';
+                    }
+                });
+            }
+        });
+
+        // 播放按钮动画
+        document.querySelectorAll('.play-overlay').forEach(overlay => {
+            overlay.addEventListener('click', function(e) {
+                e.stopPropagation();
+                const btn = this.querySelector('.play-btn');
+                btn.classList.add('fa-pause-circle');
+                setTimeout(() => {
+                    btn.classList.remove('fa-pause-circle');
+                }, 200);
+            });
+        });
+    </script>
 </body>
 </html>
